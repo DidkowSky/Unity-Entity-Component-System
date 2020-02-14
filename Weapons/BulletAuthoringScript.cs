@@ -15,7 +15,7 @@ namespace Assets.Scripts.DOTS
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initalize()
         {
-            entityManager = World.Active.EntityManager;
+            entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         }
 
         public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
@@ -25,10 +25,8 @@ namespace Assets.Scripts.DOTS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var bullet = new Bullet
+            var bullet = new BulletComponent
             {
-                Prefab = conversionSystem.GetPrimaryEntity(Prefab),
-                MovementVector = float3.zero,
                 Damage = 1
             };
             /*

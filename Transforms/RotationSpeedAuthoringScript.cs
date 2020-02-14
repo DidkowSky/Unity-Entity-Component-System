@@ -13,7 +13,7 @@ namespace Assets.Scripts.DOTS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var data = new RotationSpeed
+            var data = new RotationSpeedComponent
             {
                 RadiansPerSecondX = math.radians(DegreesPerSecondX),
                 RadiansPerSecondY = math.radians(DegreesPerSecondY),

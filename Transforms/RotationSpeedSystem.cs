@@ -11,11 +11,11 @@ namespace Assets.Scripts.DOTS
     public class RotationSpeedSystem : JobComponentSystem
     {
         [BurstCompile]
-        struct RotationSpeedJob : IJobForEach<Rotation, RotationSpeed>
+        struct RotationSpeedJob : IJobForEach<Rotation, RotationSpeedComponent>
         {
             public float DeltaTime;
             
-            public void Execute(ref Rotation rotation, [ReadOnly] ref RotationSpeed rotationSpeed)
+            public void Execute(ref Rotation rotation, [ReadOnly] ref RotationSpeedComponent rotationSpeed)
             {
                 rotation.Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(math.up(), rotationSpeed.RadiansPerSecondY * DeltaTime));
             }
@@ -25,7 +25,7 @@ namespace Assets.Scripts.DOTS
         {
             var job = new RotationSpeedJob
             {
-                DeltaTime = Time.deltaTime
+                DeltaTime = Time.DeltaTime
             };
 
             return job.Schedule(this, inputDependencies);

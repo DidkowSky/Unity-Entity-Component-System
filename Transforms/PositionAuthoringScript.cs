@@ -11,7 +11,7 @@ namespace Assets.Scripts.DOTS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var data = new Position
+            var data = new PositionComponent
             {
                 Value = new float3(Value.x, Value.y, Value.z)
             };

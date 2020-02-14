@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.DOTS
 {
-    public struct Position : IComponentData
+    public struct PositionComponent : IComponentData
     {
         public float3 Value;
     }

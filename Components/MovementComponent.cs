@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace Assets.Scripts.DOTS
 {
-    public struct Movement : IComponentData
+    public struct MovementComponent : IComponentData
     {
         public float3 Vector;
         public float Speed;

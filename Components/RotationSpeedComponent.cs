@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.DOTS
 {
-    public struct RotationSpeed : IComponentData
+    public struct RotationSpeedComponent : IComponentData
     {
         public float RadiansPerSecondX;
         public float RadiansPerSecondY;
