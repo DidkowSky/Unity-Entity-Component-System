@@ -1,11 +1,12 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
+using Unity.Mathematics;
 
 namespace Assets.Scripts.DOTS
 {
+    [Serializable]
     public struct RotationSpeedComponent : IComponentData
     {
-        public float RadiansPerSecondX;
-        public float RadiansPerSecondY;
-        public float RadiansPerSecondZ;
+        public float3 Value;
     }
 }

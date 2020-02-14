@@ -4,31 +4,56 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Assets.Scripts.DOTS
 {
     public class RotationSpeedSystem : JobComponentSystem
     {
+        private EntityQuery entityQuery;
+
+        protected override void OnCreate()
+        {
+            entityQuery = GetEntityQuery(typeof(Rotation), ComponentType.ReadOnly<RotationSpeedComponent>());
+        }
+
         [BurstCompile]
-        struct RotationSpeedJob : IJobForEach<Rotation, RotationSpeedComponent>
+        private struct RotationSpeedJob : IJobChunk
         {
             public float DeltaTime;
-            
-            public void Execute(ref Rotation rotation, [ReadOnly] ref RotationSpeedComponent rotationSpeed)
+            public ArchetypeChunkComponentType<Rotation> RotationType;
+            [ReadOnly] public ArchetypeChunkComponentType<RotationSpeedComponent> RotationSpeedComponentType;
+
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
-                rotation.Value = math.mul(math.normalize(rotation.Value), quaternion.AxisAngle(math.up(), rotationSpeed.RadiansPerSecondY * DeltaTime));
+                var chunkRotations = chunk.GetNativeArray(RotationType);
+                var chunkRotationSpeeds = chunk.GetNativeArray(RotationSpeedComponentType);
+
+                for (int i = 0; i < chunk.Count; i++)
+                {
+                    var rotation = chunkRotations[i];
+                    var rotationSpeed = chunkRotationSpeeds[i];
+
+                    chunkRotations[i] = new Rotation
+                    {
+                        Value = math.mul(math.normalize(rotation.Value), quaternion.Euler(rotationSpeed.Value * DeltaTime))
+                    };
+                }
             }
         }
-        
-        protected override JobHandle OnUpdate(JobHandle inputDependencies)
+
+        protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            var job = new RotationSpeedJob
+            var rotationType = GetArchetypeChunkComponentType<Rotation>();
+            var rotationSpeedType = GetArchetypeChunkComponentType<RotationSpeedComponent>();
+
+            var job = new RotationSpeedJob()
             {
-                DeltaTime = Time.DeltaTime
+                DeltaTime = Time.DeltaTime,
+                RotationType = rotationType,
+                RotationSpeedComponentType = rotationSpeedType
             };
 
-            return job.Schedule(this, inputDependencies);
+            return job.Schedule(entityQuery, inputDeps);
         }
     }
 }
