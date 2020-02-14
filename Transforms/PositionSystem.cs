@@ -21,7 +21,7 @@ namespace Assets.Scripts.DOTS
 
             public void Execute(Entity entity, int index, [ReadOnly] ref Translation position)
             {
-                CommandBuffer.SetComponent(index, entity, new Translation { Value = position.Value });
+                //CommandBuffer.SetComponent(index, entity, new Translation { Value = position.Value });
             }
         }
 
