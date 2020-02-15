@@ -8,7 +8,8 @@ namespace Assets.Scripts.DOTS
     public struct MovementComponent : IComponentData
     {
         public float3 Vector;
-        public float Speed;
+        public float Velocity;
+        public float Acceleration;
         public float MaxSpeed;
     }
 }
