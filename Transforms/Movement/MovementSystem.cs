@@ -37,17 +37,6 @@ namespace Assets.Scripts.DOTS
                     {
                         Value = translation.Value + (movement.Vector * movement.Velocity * DeltaTime)
                     };
-
-                    if (chunkMovements[i].Velocity != 0 && (math.abs(chunkTranslations[i].Value.x) > 4 || math.abs(chunkTranslations[i].Value.y) > 8))
-                    {
-                        chunkMovements[i] = new MovementComponent
-                        {
-                            Vector = chunkMovements[i].Vector,
-                            Velocity = 0,
-                            Acceleration = chunkMovements[i].Acceleration,
-                            MaxSpeed = chunkMovements[i].MaxSpeed
-                        };
-                    }
                 }
             }
         }
