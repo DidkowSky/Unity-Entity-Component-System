@@ -12,6 +12,5 @@ namespace Assets.Scripts.DOTS
         public Entity GameObject;
         public bool Shoot;
         public float LastShootTime;
-        //public Prefab WeaponPrefab;
     }
 }
