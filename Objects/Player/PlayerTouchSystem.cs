@@ -1,9 +1,5 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Jobs;
+﻿using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace Assets.Scripts.DOTS
@@ -35,16 +31,20 @@ namespace Assets.Scripts.DOTS
                 {
                     SetPlayersPosition(Input.touches[0]);
                 }
+                else if (Input.touches[0].phase == TouchPhase.Ended)
+                {
+                    StopShooting();
+                }
 
                 if (Input.touches.Length > 1)
                 {
                     if (Input.touches[1].phase == TouchPhase.Began)
                     {
-                        Debug.Log("Start Shoot!");
+                        StartShooting();
                     }
                     else if (Input.touches[1].phase == TouchPhase.Ended)
                     {
-                        Debug.Log("Stop Shooting.");
+                        StopShooting();
                     }
                 }
             }
@@ -55,6 +55,22 @@ namespace Assets.Scripts.DOTS
             Entities.WithAll<PlayerComponent>().ForEach((ref PlayerComponent playerComponent) =>
             {
                 playerComponent.DestinationPoint = GetTouchPosition(touch);
+            });
+        }
+
+        private void StartShooting()
+        {
+            Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
+            {
+                weaponComponent.Shoot = true;
+            });
+        }
+
+        private void StopShooting()
+        {
+            Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
+            {
+                weaponComponent.Shoot = false;
             });
         }
 
