@@ -6,12 +6,12 @@ namespace Assets.Scripts.DOTS
     [Serializable]
     public struct WeaponComponent : IComponentData
     {
-        public float ReloadTime;
+        public float TimeBetweenShoots;
         public Entity BulletPrefab;
 
         public Entity GameObject;
-        public bool Shoot;
-        public float LastShootTime;
+        public bool isShooting;
+        public float TimeSinceLastShoot;
         //public Prefab WeaponPrefab;
     }
 }

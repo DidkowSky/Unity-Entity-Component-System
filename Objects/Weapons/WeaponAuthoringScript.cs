@@ -8,7 +8,7 @@ namespace Assets.Scripts.DOTS
     [AddComponentMenu("DOTS/Objects/Weapon")]
     public class WeaponAuthoringScript : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
     {
-        public float ReloadTime = 1.0f;
+        public float TimeBetweenShoots = 1.0f;
         public GameObject BulletPrefab;
 
         public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
@@ -20,11 +20,11 @@ namespace Assets.Scripts.DOTS
         {
             var bulletData = new WeaponComponent
             {
-                ReloadTime = ReloadTime,
+                TimeBetweenShoots = TimeBetweenShoots,
                 BulletPrefab = conversionSystem.GetPrimaryEntity(BulletPrefab),
                 GameObject = conversionSystem.GetPrimaryEntity(gameObject),
-                Shoot = false,
-                LastShootTime = 0.0f
+                isShooting = false,
+                TimeSinceLastShoot = 0.0f
             };
 
             dstManager.AddComponentData(entity, bulletData);

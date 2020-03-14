@@ -62,7 +62,7 @@ namespace Assets.Scripts.DOTS
         {
             Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
             {
-                weaponComponent.Shoot = true;
+                weaponComponent.isShooting = true;
             });
         }
 
@@ -70,7 +70,7 @@ namespace Assets.Scripts.DOTS
         {
             Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
             {
-                weaponComponent.Shoot = false;
+                weaponComponent.isShooting = false;
             });
         }
 

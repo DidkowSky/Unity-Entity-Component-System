@@ -4,6 +4,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Assets.Scripts.DOTS
 {
@@ -22,7 +23,7 @@ namespace Assets.Scripts.DOTS
         [BurstCompile]
         private struct ShootJob : IJobChunk
         {
-            public float Time;
+            public float DeltaTime;
             [ReadOnly] public ArchetypeChunkComponentType<Translation> TranslationType;
             public ArchetypeChunkComponentType<WeaponComponent> WeaponComponentType;
             [WriteOnly] public EntityCommandBuffer.Concurrent CommandBuffer;
@@ -39,12 +40,28 @@ namespace Assets.Scripts.DOTS
                     var translation = chunkTranslations[i];
                     var weapon = chunkWeapons[i];
 
-                    if (weapon.Shoot && ((Time - weapon.LastShootTime) >= weapon.ReloadTime))
+                    if (weapon.isShooting)
                     {
-                        weapon.LastShootTime = Time;
-                        var newBullet = CommandBuffer.Instantiate(threadIndex, weapon.BulletPrefab);
-                        CommandBuffer.SetComponent(threadIndex, newBullet, new Translation { Value = translation.Value });
+                        if (weapon.TimeSinceLastShoot == 0.0f || weapon.TimeSinceLastShoot >= weapon.TimeBetweenShoots)
+                        {
+                            var newBullet = CommandBuffer.Instantiate(threadIndex, weapon.BulletPrefab);
+                            CommandBuffer.SetComponent(threadIndex, newBullet, new Translation { Value = translation.Value });
+
+                            if (weapon.TimeSinceLastShoot > 0.0f)
+                            {
+                                weapon.TimeSinceLastShoot = 0.0f;
+                            }
+                        }
                     }
+
+                    chunkWeapons[i] = new WeaponComponent
+                    {
+                        BulletPrefab = weapon.BulletPrefab,
+                        GameObject = weapon.GameObject,
+                        isShooting = weapon.isShooting,
+                        TimeBetweenShoots = weapon.TimeBetweenShoots,
+                        TimeSinceLastShoot = weapon.TimeSinceLastShoot + DeltaTime
+                    };
                 }
             }
         }
@@ -58,7 +75,7 @@ namespace Assets.Scripts.DOTS
 
             var job = new ShootJob()
             {
-                Time = UnityEngine.Time.time,
+                DeltaTime = UnityEngine.Time.deltaTime,
                 TranslationType = translationType,
                 WeaponComponentType = weaponType,
                 CommandBuffer = commandBuffer
