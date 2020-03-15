@@ -54,14 +54,17 @@ namespace Assets.Scripts.DOTS
                         }
                     }
 
-                    chunkWeapons[i] = new WeaponComponent
+                    if (weapon.TimeSinceLastShoot <= weapon.TimeBetweenShoots)
                     {
-                        BulletPrefab = weapon.BulletPrefab,
-                        GameObject = weapon.GameObject,
-                        isShooting = weapon.isShooting,
-                        TimeBetweenShoots = weapon.TimeBetweenShoots,
-                        TimeSinceLastShoot = weapon.TimeSinceLastShoot + DeltaTime
-                    };
+                        chunkWeapons[i] = new WeaponComponent
+                        {
+                            BulletPrefab = weapon.BulletPrefab,
+                            GameObject = weapon.GameObject,
+                            isShooting = weapon.isShooting,
+                            TimeBetweenShoots = weapon.TimeBetweenShoots,
+                            TimeSinceLastShoot = weapon.TimeSinceLastShoot + DeltaTime
+                        };
+                    }
                 }
             }
         }
