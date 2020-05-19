@@ -8,5 +8,6 @@ namespace Assets.Scripts.DOTS
     {
         public float MinDamage;
         public float MaxDamage;
+        public float Range;
     }
 }

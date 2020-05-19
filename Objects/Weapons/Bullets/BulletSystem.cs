@@ -1,49 +1,33 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Assets.Scripts.DOTS
 {
-    public class BulletSystem : JobComponentSystem
+    public class BulletSystem : SystemBase
     {
-        private EntityCommandBufferSystem entityCommandBufferSystem;
+        private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBuffer;
 
         protected override void OnCreate()
         {
-            entityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            endSimulationEntityCommandBuffer = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
-        [BurstCompile]
-        private struct BulletJob : IJobForEachWithEntity<BulletComponent, Translation>
+        protected override void OnUpdate()
         {
-            public float DeltaTime;
+            var CommandBuffer = endSimulationEntityCommandBuffer.CreateCommandBuffer().ToConcurrent();
 
-            [WriteOnly] public EntityCommandBuffer.Concurrent CommandBuffer;
-
-            public void Execute(Entity entity, int jobIndex, ref BulletComponent lifeTime, ref Translation translation)
+            Entities
+            .WithAll<Translation, BulletComponent>()
+            .ForEach((Entity entity, int entityInQueryIndex, ref Translation translation, in BulletComponent bullet) =>
             {
-                if (translation.Value.y > 8)
+                if (translation.Value.y > bullet.Range)
                 {
-                    CommandBuffer.DestroyEntity(jobIndex, entity);
+                    CommandBuffer.DestroyEntity(entityInQueryIndex, entity);
                 }
-            }
-        }
-
-        protected override JobHandle OnUpdate(JobHandle inputDependencies)
-        {
-            var commandBuffer = entityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
-
-            var job = new BulletJob
-            {
-                DeltaTime = Time.DeltaTime,
-                CommandBuffer = commandBuffer
-            }.Schedule(this, inputDependencies);
-
-            entityCommandBufferSystem.AddJobHandleForProducer(job);
-
-            return job;
+            })
+            .ScheduleParallel();
         }
     }
 }

@@ -9,13 +9,15 @@ namespace Assets.Scripts.DOTS
     {
         public float MinDamage = 0.0f;
         public float MaxDamage = 10.0f;
+        public float Range = 5.0f;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
             var bulletData = new BulletComponent
             {
                 MinDamage = MinDamage,
-                MaxDamage = MaxDamage
+                MaxDamage = MaxDamage,
+                Range = Range
             };
 
             dstManager.AddComponentData(entity, bulletData);
