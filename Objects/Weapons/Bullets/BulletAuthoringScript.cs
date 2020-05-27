@@ -17,7 +17,8 @@ namespace Assets.Scripts.DOTS
             {
                 MinDamage = MinDamage,
                 MaxDamage = MaxDamage,
-                Range = Range
+                Range = Range,
+                StartingPosition = new Unity.Mathematics.float3(0, 0, 0)
             };
 
             dstManager.AddComponentData(entity, bulletData);

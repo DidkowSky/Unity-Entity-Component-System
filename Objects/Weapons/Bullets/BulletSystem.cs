@@ -1,7 +1,6 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Assets.Scripts.DOTS
 {
@@ -22,7 +21,7 @@ namespace Assets.Scripts.DOTS
             .WithAll<Translation, BulletComponent>()
             .ForEach((Entity entity, int entityInQueryIndex, ref Translation translation, in BulletComponent bullet) =>
             {
-                if (translation.Value.y > bullet.Range)
+                if (translation.Value.y > (bullet.StartingPosition.y + bullet.Range))
                 {
                     CommandBuffer.DestroyEntity(entityInQueryIndex, entity);
                 }

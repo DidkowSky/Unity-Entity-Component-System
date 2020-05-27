@@ -60,7 +60,7 @@ namespace Assets.Scripts.DOTS
 
         private void StartShooting()
         {
-            Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
+            Entities.WithAll<PlayerWeaponComponent>().ForEach((ref PlayerWeaponComponent weaponComponent) =>
             {
                 weaponComponent.isShooting = true;
             });
@@ -68,7 +68,7 @@ namespace Assets.Scripts.DOTS
 
         private void StopShooting()
         {
-            Entities.WithAll<PlayerComponent, WeaponComponent>().ForEach((ref WeaponComponent weaponComponent) =>
+            Entities.WithAll<PlayerWeaponComponent>().ForEach((ref PlayerWeaponComponent weaponComponent) =>
             {
                 weaponComponent.isShooting = false;
             });

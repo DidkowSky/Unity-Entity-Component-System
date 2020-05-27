@@ -4,7 +4,7 @@ using Unity.Entities;
 namespace Assets.Scripts.DOTS
 {
     [Serializable]
-    public struct WeaponComponent : IComponentData
+    public struct PlayerWeaponComponent : IComponentData
     {
         public float TimeBetweenShoots;
         public Entity BulletPrefab;

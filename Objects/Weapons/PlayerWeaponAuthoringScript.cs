@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Assets.Scripts.DOTS
 {
     [RequiresEntityConversion]
-    [AddComponentMenu("DOTS/Objects/Weapon")]
-    public class WeaponAuthoringScript : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
+    [AddComponentMenu("DOTS/Objects/Player Weapon")]
+    public class PlayerWeaponAuthoringScript : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
     {
         public float TimeBetweenShoots = 1.0f;
         public GameObject BulletPrefab;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.DOTS
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var bulletData = new WeaponComponent
+            var bulletData = new PlayerWeaponComponent
             {
                 TimeBetweenShoots = TimeBetweenShoots,
                 BulletPrefab = conversionSystem.GetPrimaryEntity(BulletPrefab),
